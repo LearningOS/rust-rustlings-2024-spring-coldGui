@@ -15,7 +15,7 @@ use std::num::ParseIntError;
 pub fn generate_nametag_text(name: String) -> Result<String,String> {
     if name.is_empty() {
         // Empty names aren't allowed.
-        let a:Result<i32,ParseIntError>=Err(1,"invalid digit found in string".into());
+        //let a:Result<i32,ParseIntError>=Err(1,"invalid digit found in string".into());
         Err("`name` was empty; it must be nonempty.".into())
     } else {
         Ok(format!("Hi! My name is {}", name))
