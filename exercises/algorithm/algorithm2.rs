@@ -2,7 +2,6 @@
 	double linked list reverse
 	This problem requires you to reverse a doubly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -31,13 +30,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T:Clone> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T:Clone> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -72,9 +71,19 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn reverse(&mut self){
-		// TODO
-	}
+    pub unsafe fn reverse(&mut self) {
+        let mut current=self.start.take();//2
+        let mut prev=None;
+        while let Some(mut node)=current{
+            let next=node.as_mut().next.take();//3
+            node.as_mut().prev=prev;
+            node.as_mut().next=self.start;
+            prev=Some(node);
+            self.start=current;
+            current=next;
+        }
+        self.end=prev;
+    }
 }
 
 impl<T> Display for LinkedList<T>
@@ -134,7 +143,7 @@ mod tests {
 			list.add(original_vec[i]);
 		}
 		println!("Linked List is {}", list);
-		list.reverse();
+		unsafe {list.reverse();}
 		println!("Reversed Linked List is {}", list);
 		for i in 0..original_vec.len(){
 			assert_eq!(reverse_vec[i],*list.get(i as i32).unwrap());
@@ -150,7 +159,7 @@ mod tests {
 			list.add(original_vec[i]);
 		}
 		println!("Linked List is {}", list);
-		list.reverse();
+		unsafe {list.reverse();}
 		println!("Reversed Linked List is {}", list);
 		for i in 0..original_vec.len(){
 			assert_eq!(reverse_vec[i],*list.get(i as i32).unwrap());
