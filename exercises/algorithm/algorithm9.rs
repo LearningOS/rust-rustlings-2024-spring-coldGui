@@ -2,14 +2,13 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
 
 pub struct Heap<T>
-where
-    T: Default,
+    where
+        T: Default,
 {
     count: usize,
     items: Vec<T>,
@@ -17,8 +16,8 @@ where
 }
 
 impl<T> Heap<T>
-where
-    T: Default,
+    where
+        T: Default,
 {
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
@@ -37,7 +36,23 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        let it=&self.items;
+        if self.count==0{
+            self.items.push(value);
+            self.count+=1;
+            return;
+        }
+        for i in 1..it.len(){
+            if (self.comparator)(&it[i],&value)==true{
+                self.items.insert(i,value);
+                self.count+=1;
+                break;
+            }else if i==it.len()-1 {
+                self.items.push(value);
+                self.count+=1;
+                return;
+            }
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,14 +72,13 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        0
     }
 }
 
 impl<T> Heap<T>
-where
-    T: Default + Ord,
+    where
+        T: Default + Ord,
 {
     /// Create a new MinHeap
     pub fn new_min() -> Self {
@@ -78,14 +92,16 @@ where
 }
 
 impl<T> Iterator for Heap<T>
-where
-    T: Default,
+    where
+        T: Default,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty()==false{
+            self.count-=1;
+            self.items.pop()
+        }else { None }
     }
 }
 
@@ -94,8 +110,8 @@ pub struct MinHeap;
 impl MinHeap {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T>() -> Heap<T>
-    where
-        T: Default + Ord,
+        where
+            T: Default + Ord,
     {
         Heap::new(|a, b| a < b)
     }
@@ -106,8 +122,8 @@ pub struct MaxHeap;
 impl MaxHeap {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T>() -> Heap<T>
-    where
-        T: Default + Ord,
+        where
+            T: Default + Ord,
     {
         Heap::new(|a, b| a > b)
     }

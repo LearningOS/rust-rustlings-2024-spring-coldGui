@@ -1,8 +1,7 @@
 /*
 	queue
-	This question requires you to use queues to implement the functionality of the stac
+	This question requires you to use queues to implement the functionality of the stack
 */
-// I AM NOT DONE
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -54,39 +53,65 @@ impl<T> Default for Queue<T> {
 
 pub struct myStack<T>
 {
-	//TODO
-	q1:Queue<T>,
-	q2:Queue<T>
+    //push进q1,pop从q2出（q1转移到q2）
+    size:u8,
+    q1:Queue<T>,
+    q2:Queue<T>
 }
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
-			//TODO
-			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new()
+            size:0,
+            q1:Queue::<T>::new(),
+            q2:Queue::<T>::new()
         }
     }
     pub fn push(&mut self, elem: T) {
-        //TODO
+        if self.q1.is_empty(){
+            self.q2.enqueue(elem);
+        }else {
+            self.q1.enqueue(elem);
+        }
+        self.size+=1;
     }
     pub fn pop(&mut self) -> Result<T, &str> {
-        //TODO
-		Err("Stack is empty")
+        //q1 1 2 3
+        //q2
+        //q1 3
+        //q2 1 2
+        if self.q1.is_empty() && self.q2.is_empty(){
+            Err("Stack is empty")
+        }else if !self.q1.is_empty(){
+            for i in 0..self.q1.size()-1{
+                let mut temp;
+                temp=self.q1.dequeue().unwrap();
+                self.q2.enqueue(temp);
+            }
+            self.size-=1;
+            self.q1.dequeue()
+        }else {
+            for i in 0..self.q2.size()-1{
+                let mut temp;
+                temp=self.q2.dequeue().unwrap();
+                self.q1.enqueue(temp);
+            }
+            self.size-=1;
+            self.q2.dequeue()
+        }
     }
     pub fn is_empty(&self) -> bool {
-		//TODO
-        true
+        self.size==0
     }
 }
 
 #[cfg(test)]
 mod tests {
-	use super::*;
-	
-	#[test]
-	fn test_queue(){
-		let mut s = myStack::<i32>::new();
-		assert_eq!(s.pop(), Err("Stack is empty"));
+    use super::*;
+
+    #[test]
+    fn test_queue(){
+        let mut s = myStack::<i32>::new();
+        assert_eq!(s.pop(), Err("Stack is empty"));
         s.push(1);
         s.push(2);
         s.push(3);
@@ -100,5 +125,5 @@ mod tests {
         assert_eq!(s.pop(), Ok(1));
         assert_eq!(s.pop(), Err("Stack is empty"));
         assert_eq!(s.is_empty(), true);
-	}
+    }
 }
