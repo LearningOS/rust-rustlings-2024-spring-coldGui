@@ -2,7 +2,6 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -29,13 +28,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T:Ord> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T:Ord> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -79,7 +78,7 @@ impl<T> LinkedList<T> {
         } as i32;
 
         for i in 0..max_length {
-            if let Some(a) = ist_a.get(i) {
+            if let Some(a) = list_a.get(i) {
                 vec.push(unsafe { std::mem::transmute_copy(a) });
             }
 
