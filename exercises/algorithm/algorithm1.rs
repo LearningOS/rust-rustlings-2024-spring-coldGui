@@ -5,7 +5,7 @@
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
 
-use std::ascii::Char::Null;
+//use std::ascii::Char::Null;
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
 use std::vec::*;
