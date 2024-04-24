@@ -69,14 +69,29 @@ impl<T> LinkedList<T> {
             },
         }
     }
-    pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-    {
-        //TODO
-        Self {
-            length: 0,
-            start: None,
-            end: None,
+    pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self {
+        let mut linked_list: LinkedList<T> = LinkedList::new();
+        let mut vec: Vec<T> = vec![];
+        let max_length = if list_a.length > list_b.length {
+            list_a.length
+        } else {
+            list_b.length
+        } as i32;
+
+        for i in 0..max_length {
+            if let Some(a) = ist_a.get(i) {
+                vec.push(unsafe { std::mem::transmute_copy(a) });
+            }
+
+            if let Some(b) = list_b.get(i) {
+                vec.push(unsafe { std::mem::transmute_copy(b) });
+            }
         }
+
+        vec.sort();
+        vec.into_iter().for_each(|e| linked_list.add(e));
+
+        linked_list
     }
 }
 
